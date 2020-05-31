@@ -1,0 +1,132 @@
+:root {
+  --blue-1: #1a91eb;
+  --blue-2: #127ed0;
+  --blue-3: #7cabce;
+
+  --gray-1: #333;
+  --gray-2: #666;
+  --gray-3: #999;
+  --gray-4: #CCC;
+  --gray-5: #DDD;
+  --gray-6: #f4f4f4;
+
+  --red: #ad3333;
+  --green: #009900;
+
+  --site-margin: 1rem;
+
+  --font-size-small: .7rem;
+}
+
+html, body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  color: var(--gray-1);
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+a {
+  color: var(--blue-1);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a:visited {
+  color: var(--blue-2);
+}
+
+label {
+  display: block;
+}
+
+input, button, a.button, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0.4em;
+  margin: 0 0 0.5em 0;
+  box-sizing: border-box;
+  border: 1px solid var(--gray-4);
+  border-radius: 2px;
+}
+
+input:disabled {
+  color: var(--gray-4);
+}
+
+input[type="range"] {
+  height: 0;
+}
+
+button,
+a.button {
+  color: var(--gray-1);
+  background-color: var(--gray-6);
+  outline: none;
+  text-decoration: none;
+}
+
+button:disabled {
+  color: var(--gray-3);
+}
+
+button:not(:disabled):active,
+button:not(:disabled):hover,
+a.button:hover {
+  background-color: var(--gray-5);
+}
+
+button:focus,
+a.button:focus {
+  border-color: var(--gray-2);
+}
+
+button.primary,
+a.button.primary,
+input[type=button].primary {
+  background: var(--blue-2);
+  color: white;
+}
+
+button.primary:not(:hover),
+a.button.primary:not(:hover),
+input[type=button].primary:not(:hover) {
+  border-color: var(--blue-1);
+}
+
+button.primary:hover,
+a.button.primary:hover,
+input[type=button].primary:hover {
+  background: var(--blue-1);
+}
+
+button.primary:disabled,
+a.button.primary.disabled,
+input[type=button].primary:disabled {
+  background: var(--blue-3);
+  border: none;
+}
+
+button, a.button {
+  border: none;
+  padding: .3rem .6rem;
+}
+
+button:focus,
+a.button:focus {
+  border: solid 1px var(--blue-2);
+  padding: calc(.3rem - 1px) calc(.6rem - 1px);
+}
+
+input {
+  padding: calc(.3rem - 1px) calc(.6rem - 1px);
+}
