@@ -2,6 +2,8 @@
 
   import { fetchStocks } from './util';
 
+  import Loader from './Loader.svelte';
+
   import StockDataLoader from './StockDataLoader.svelte';
 
   let stocksURL;
@@ -24,7 +26,7 @@
   {#if stocksLoaded}
 
     {#await stocksLoaded}
-      Loading stocks...
+      <Loader />
     {:then stocks}
       <StockDataLoader stocks={ stocks } />
     {:catch loadError}
