@@ -20,9 +20,6 @@
 </script>
 
 <main>
-  <h1>Stock Stats</h1>
-
-  <p class="intro">Echtzeit Statistiken und Kontext.</p>
 
   {#if stocksLoaded}
 
@@ -47,7 +44,7 @@
         </button>
 
         <div class="hint">
-          This has to be a <code>;</code> separated list of (Name, ISIN) for each stock that should be shown. <br/>
+          This has to be a semicolon separated list of (Name, ISIN) for each stock that should be shown. <br/>
           First line will be ignored. <a rel="download" href="stocks.csv">Download example</a> or <a href="?stocks=stocks.csv" target="_blank" rel="noopener noreferer">explore in action</a>.
         </div>
 
@@ -72,7 +69,6 @@
   }
 
   .notice {
-    margin-top: 40px;
     border: solid 1px var(--gray-3);
     padding: 20px;
     border-radius: 2px;
