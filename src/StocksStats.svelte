@@ -2,9 +2,9 @@
 
   import { onMount } from 'svelte';
 
-  import StockDetails from './StockDetails.svelte';
+  import ChartLoader from './ChartLoader.svelte';
 
-  import Chart from './Chart.svelte';
+  import StockDetails from './StockDetails.svelte';
 
   const periods = {
     intraday: 'Intraday',
@@ -168,17 +168,19 @@
           <StockDetails data={ stock.data } />
         </h3>
         <div class="actions">
+          <a class="button" title="Stock information" href="https://www.dkb.de/kurse/portrait.html?isin={ stock.isin }">
+            I
+          </a>
           <a class="button" title="Kaufen" href="https://www.dkb.de/-?$part=DkbTransactionBanking.content.brokerage.processes.SecurityOrder&$event=$pageflow-start&buy=true&wknIsin={ stock.isin }" target="_blank" rel="noreferrer noopener">K</a>
           <a class="button" title="Verkaufen" href="https://www.dkb.de/-?$part=DkbTransactionBanking.content.brokerage.processes.SecurityOrder&$event=$pageflow-start&sell=true&wknIsin={ stock.isin }" target="_blank" rel="noreferrer noopener">V</a>
         </div>
       </div>
 
       <div class="chart">
-        <Chart
+        <ChartLoader
           isin={ stock.isin }
           period={ period }
           now={ now }
-          detailsLink="https://www.dkb.de/kurse/portrait.html?isin={ stock.isin }"
         />
       </div>
 
