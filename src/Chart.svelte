@@ -5,13 +5,38 @@
     scaleLinear
   } from 'd3-scale';
 
-  const padding = { top: 15, right: 15, bottom: 25, left: 35 };
+  const padding = { top: 15, right: 25, bottom: 35, left: 40 };
 
   export let period;
   export let data;
 
   let width = 500;
   let height = 200;
+
+  $: tldr = {
+    left: padding.left,
+    right: width - padding.right,
+    top: padding.top,
+    bottom: height - padding.bottom,
+    width: width - padding.left - padding.right,
+    height: height - padding.top - padding.bottom
+  };
+
+  const xTickExact = {
+    intraday: true,
+    week: false,
+    month: true,
+    month6: false,
+    year: false
+  };
+
+  const xTickFormats = {
+    intraday: '%I:%M',
+    week: '%a',
+    month: '%d.%m',
+    month6: '%b',
+    year: '%b'
+  };
 
   function time(point) {
     return new Date(point.time);
@@ -32,17 +57,21 @@
 
   $: xDomain = dates.reduce((result, date, idx) => {
 
-    if (!result.currentRange && date.getHours() >= 8) {
-      const nextRange = result.currentRange = [
+    let {
+      currentRange
+    } = result;
+
+    if (currentRange && date.getDay() !== currentRange[0].getDay()) {
+      currentRange = result.currentRange = null;
+    }
+
+    if (!currentRange && date.getHours() >= 8) {
+      currentRange = result.currentRange = [
         tradeDayBegin(date),
         tradeDayEnd(date)
       ];
 
-      result.ranges.push(nextRange);
-    }
-
-    if (date.getHours() >= 22) {
-      delete result.currentRange;
+      result.ranges.push(currentRange);
     }
 
     return result;
@@ -60,26 +89,12 @@
     return ranges;
   }, []).flat();
 
-  $: tldr = {
-    left: padding.left,
-    right: width - padding.right,
-    top: padding.top,
-    bottom: height - padding.bottom,
-    width: width - padding.left - padding.right,
-    height: height - padding.top - padding.bottom
-  };
+  $: xTicksExact = xTickExact[period];
 
   $: xScale = scaleTime()
     .domain(xDomain)
     .range(xRange)
     .nice();
-
-  // [ startA, endA, startB, endB, startC, endC ]
-  // [0, 1/3, 1/3, 2/3, 2/3, 1]
-  $: console.log(xScale.range());
-
-  $: formatXTick = xScale.tickFormat();
-  $: formatYTick = yScale.tickFormat();
 
   $: yScale = scaleLinear()
     .domain([ yMax, yMin ])
@@ -87,6 +102,9 @@
 
   $: xTicks = xScale.ticks(getXTicks(period));
   $: yTicks = yScale.ticks(5);
+
+  $: formatXTick = xScale.tickFormat(xTicks.length, xTickFormats[period] || xTickFormats['__default']);
+  $: formatYTick = yScale.tickFormat();
 
   $: path = points.reduce((segments, p) => {
 
@@ -129,7 +147,7 @@
 
     const tmap = {
       intraday: 9,
-      week: 5,
+      week: 6,
       month: 4,
       month6: 6,
       year: 6
@@ -160,8 +178,13 @@
         <g class="tick" transform="translate({ tldr.left + xScale(tick) * tldr.width }, 0)">
           {#if xTicks.length < 8 || idx % 2 === 0}
             <line class="line" y1="{ tldr.top }" y2="{ tldr.bottom }"></line>
-            <line class="legend" y1="{ tldr.bottom }" y2="{ tldr.bottom + 3 }"></line>
-            <text y="{ tldr.bottom + 15 }">{formatXTick(tick)}</text>
+
+            {#if xTicksExact}
+              <line class="legend" y1={ tldr.bottom } y2={ tldr.bottom + 3 }></line>
+              <text y={ tldr.bottom + 15 }>{formatXTick(tick)}</text>
+            {:else if xTicks.length - 1 !== idx}
+              <text x={ (xScale(xTicks[idx + 1]) - xScale(tick)) / 2 * tldr.width } y={ tldr.bottom + 15 }>{formatXTick(tick)}</text>
+            {/if}
           {/if}
         </g>
       {/each}

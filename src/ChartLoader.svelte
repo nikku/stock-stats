@@ -19,7 +19,7 @@
 
   $: period = periods[periodDE];
 
-  $: dataLoaded = fetchStockPoints(isin, period, now).then(results => console.log(results) || results);
+  $: dataLoaded = fetchStockPoints(isin, period, now);
 
   function fetchStockPoints(isin, period, now) {
     return (
