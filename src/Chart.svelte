@@ -31,7 +31,7 @@
   };
 
   const xTickFormats = {
-    intraday: '%I:%M',
+    intraday: '%H:%M',
     week: '%a',
     month: '%d.%m',
     month6: '%b',
@@ -149,7 +149,7 @@
       intraday: 9,
       week: 6,
       month: 4,
-      month6: 6,
+      month6: 8,
       year: 6
     };
 
@@ -176,7 +176,7 @@
     <g class="axis x-axis">
       {#each xTicks as tick, idx}
         <g class="tick" transform="translate({ tldr.left + xScale(tick) * tldr.width }, 0)">
-          {#if xTicks.length < 8 || idx % 2 === 0}
+          {#if xTicks.length < 9 || idx % 2 === 0}
             <line class="line" y1="{ tldr.top }" y2="{ tldr.bottom }"></line>
 
             {#if xTicksExact}
