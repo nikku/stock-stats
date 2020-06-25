@@ -30,11 +30,29 @@
 </script>
 
 {#await dataLoaded}
-  ...
+  <div class="loader">
+    <Loader />
+  </div>
 {:then data}
-  <Chart data={ data } period={ period } />
+  <Chart data={ data } period={ period } svgStyle="var(--chart-height)" />
 {:catch loadError}
   <p class="error">
     Could not load chart: { loadError.message }
   </p>
 {/await}
+
+
+<style>
+
+  :root {
+    --chart-height: 240px;
+  }
+
+  .loader {
+    height: var(--chart-height);
+    border-radius: 5px;
+    background: var(--gray-6);
+    position: relative;
+  }
+
+</style>

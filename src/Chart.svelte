@@ -5,10 +5,12 @@
     scaleLinear
   } from 'd3-scale';
 
-  const padding = { top: 15, right: 25, bottom: 35, left: 40 };
+  const padding = { top: 5, right: 25, bottom: 20, left: 40 };
 
   export let period;
   export let data;
+
+  export let svgStyle = '';
 
   let width = 500;
   let height = 200;
@@ -43,7 +45,7 @@
   }
 
   function money(point) {
-    return (parseFloat(point.bid) + parseFloat(point.ask)) / 2;
+    return parseFloat(point.last);
   }
 
   $: points = data.values;
@@ -97,7 +99,7 @@
     .nice();
 
   $: yScale = scaleLinear()
-    .domain([ yMax, yMin ])
+    .domain([ yMax + (yMax - yMin) / 20, yMin - (yMax - yMin) / 20 ])
     .nice();
 
   $: xTicks = xScale.ticks(getXTicks(period));
@@ -147,7 +149,7 @@
 
     const tmap = {
       intraday: 9,
-      week: 6,
+      week: 8,
       month: 4,
       month6: 8,
       year: 6
@@ -155,10 +157,20 @@
 
     return tmap[period];
   }
+
+  function showXTick(ticks, tick, index, period) {
+    if (period !== 'intraday') {
+      return true;
+    } else {
+      return index % 2 === 0;
+    }
+  }
+
+  $: console.log(xTicks);
 </script>
 
 <div class="chart" bind:clientWidth={width} bind:clientHeight={height}>
-  <svg>
+  <svg style={ svgStyle }>
 
     <!-- y axis -->
     <g class="axis y-axis">
@@ -176,13 +188,13 @@
     <g class="axis x-axis">
       {#each xTicks as tick, idx}
         <g class="tick" transform="translate({ tldr.left + xScale(tick) * tldr.width }, 0)">
-          {#if xTicks.length < 9 || idx % 2 === 0}
+          {#if showXTick(xTicks, tick, idx, period)}
             <line class="line" y1="{ tldr.top }" y2="{ tldr.bottom }"></line>
 
             {#if xTicksExact}
               <line class="legend" y1={ tldr.bottom } y2={ tldr.bottom + 3 }></line>
               <text y={ tldr.bottom + 15 }>{formatXTick(tick)}</text>
-            {:else if xTicks.length - 1 !== idx}
+            {:else if xTicks.length - 1 !== idx && xScale(xTicks[idx + 1]) - xScale(tick) > 0}
               <text x={ (xScale(xTicks[idx + 1]) - xScale(tick)) / 2 * tldr.width } y={ tldr.bottom + 15 }>{formatXTick(tick)}</text>
             {/if}
           {/if}
@@ -213,7 +225,6 @@
 
   .chart, h2, p {
     width: 100%;
-    max-width: 500px;
     margin-left: auto;
     margin-right: auto;
   }

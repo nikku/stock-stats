@@ -5,11 +5,10 @@
 <style>
 
   .loader-parent {
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 
   /* adapted from https://github.com/nzbin/three-dots */

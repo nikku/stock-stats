@@ -244,6 +244,7 @@
   .credit {
     font-size: var(--font-size-small);
     color: var(--gray-2);
+    margin-top: 10px;
   }
 
   .stock {
@@ -297,6 +298,7 @@
     right: 0;
     background: var(--gray-6);
     border-bottom: solid 1px var(--gray-4);
+    z-index: 100;
   }
 
   .head-container.sticky + .stocks {
