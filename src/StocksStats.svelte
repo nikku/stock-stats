@@ -63,6 +63,7 @@
 
     if (e.code == 'KeyF' && e.ctrlKey) {
       filterInputEl.focus();
+      filterInputEl.select();
 
       e.preventDefault();
       e.stopPropagation();
