@@ -4,6 +4,8 @@
 
   import StockDetails from './StockDetails.svelte';
 
+  import Chart from './Chart.svelte';
+
   const periods = {
     intraday: 'Intraday',
     woche: 'Woche',
@@ -163,7 +165,7 @@
         <h3>
           <a href={ createStockDeepLink(stock) }>{ stock.name }</a>
 
-          {#if stock.data }<StockDetails data={ stock.data } />{/if}
+          <StockDetails data={ stock.data } />
         </h3>
         <div class="actions">
           <a class="button" title="Kaufen" href="https://www.dkb.de/-?$part=DkbTransactionBanking.content.brokerage.processes.SecurityOrder&$event=$pageflow-start&buy=true&wknIsin={ stock.isin }" target="_blank" rel="noreferrer noopener">K</a>
@@ -172,14 +174,17 @@
       </div>
 
       <div class="chart">
-        <a href="https://www.dkb.de/kurse/portrait.html?isin={ stock.isin }">
-          <img src="https://www.tradegate.de/images/charts/{ period }/{ stock.isin }.png?{ now }" />
-        </a>
+        <Chart
+          isin={ stock.isin }
+          period={ period }
+          now={ now }
+          detailsLink="https://www.dkb.de/kurse/portrait.html?isin={ stock.isin }"
+        />
+      </div>
 
-        <div class="credit">
-          Data: <a href="https://www.tradegate.de/orderbuch.php?isin={ stock.isin }">Tradegate</a>,
-          ISIN: { stock.isin }
-        </div>
+      <div class="credit">
+        Data: <a href="https://www.tradegate.de/orderbuch.php?isin={ stock.isin }">Tradegate</a>,
+        ISIN: { stock.isin }
       </div>
     </div>
   {/each}

@@ -1,18 +1,32 @@
 <script>
+  import Placeholder from './Placeholder.svelte';
+
   export let data;
 
-  $: numericDelta = parseFloat(data.delta.replace(',', '.'));
+  $: numericDelta = data && parseFloat(data.delta.replace(',', '.'));
 </script>
 
 <div class="details">
 
-  <span class="average" title="Aktueller Wert">
-    { data.avg }
-  </span>
+  {#if data}
+    <span class="average" title="Aktueller Wert">
+      { data.avg }
+    </span>
 
-  <span class="delta" title="Aktuelles Tagesdelta" class:falling={ numericDelta < 0 } class:rising={ numericDelta > 0 }>
-    { data.delta }
-  </span>
+    <span class="delta" title="Aktuelles Tagesdelta" class:falling={ numericDelta < 0 } class:rising={ numericDelta > 0 }>
+      { data.delta }
+    </span>
+  {:else}
+    <Placeholder>
+      <span class="average">
+        4.1775
+      </span>
+
+      <span class="delta">
+        -4,12%
+      </span>
+    </Placeholder>
+  {/if}
 </div>
 
 <style>
