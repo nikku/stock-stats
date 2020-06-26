@@ -13,7 +13,7 @@
 </head>
 <body>
   <script>
-    if ('serviceWorker' in navigator) {
+    if ('serviceWorker' in navigator && !/localhost/.test(window.location.host)) {
 
       function triggerReload() {
         window.location.reload();
