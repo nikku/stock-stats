@@ -36,7 +36,7 @@
       return stocks;
     }
 
-    const terms = filter.split(',').map(t => t.trim().toLowerCase()).filter(t => t)
+    const terms = Array.from(filter.matchAll(/(?:"([^"]*)(?:"|$)|([^,]*)),?/g), m => m[1] || m[2]).map(t => t.trim().toLowerCase()).filter(t => t);
 
     const found = {};
 
@@ -116,7 +116,7 @@
 
     const searchParams = url.searchParams;
 
-    searchParams.set('filter', stock.name);
+    searchParams.set('filter', stock.name.includes(',') ? `"${ stock.name }"` : stock.name);
 
     return url.toString();
   }
