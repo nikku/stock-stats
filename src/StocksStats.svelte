@@ -147,7 +147,7 @@
 
     <div class="period">
       {#each periodEntries as [ key, label ]}
-        <button class:primary={ period ==key }  on:click={ () => period = key }>{ label }</button>
+        <button class:primary={ period == key }  on:click={ () => period = key }>{ label }</button>
       {/each}
     </div>
 
@@ -159,7 +159,7 @@
 
 <div class="stocks">
 
-  {#each filteredStocks as stock}
+  {#each filteredStocks as stock (stock.isin)}
     <div class="stock">
       <div class="stock-head">
         <h3>
