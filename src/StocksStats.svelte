@@ -196,7 +196,7 @@
   }
 
   .head {
-    margin: 10px var(--site-margin);
+    padding: 10px var(--site-margin);
 
     display: flex;
     align-items: center
@@ -298,10 +298,10 @@
   }
 
   .head-container.sticky + .stocks {
-    padding-top: 70px;
+    padding-top: 30px;
   }
 
   .head-container {
-    margin-bottom: 3rem;
+    margin-bottom: 1.5rem;
   }
 </style>
