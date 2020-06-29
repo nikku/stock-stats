@@ -36,8 +36,7 @@
     intraday: '%H:%M',
     week: '%a',
     month: '%d.%m',
-    month6: '%b',
-    year: '%b'
+    __default: '%b'
   };
 
   function time(point) {
@@ -57,27 +56,29 @@
   $: yMax = Math.max.apply(null, yValues);
   $: yMin = Math.min.apply(null, yValues);
 
-  $: xDomain = dates.reduce((result, date, idx) => {
+  $: xDomain = dates.reduce(
+    (result, date, idx) => {
 
-    let {
-      currentRange
-    } = result;
+      let {
+        currentRange
+      } = result;
 
-    if (currentRange && date.getDay() !== currentRange[0].getDay()) {
-      currentRange = result.currentRange = null;
-    }
+      if (currentRange && date.getDay() !== currentRange[0].getDay()) {
+        currentRange = result.currentRange = null;
+      }
 
-    if (!currentRange && date.getHours() >= 8) {
-      currentRange = result.currentRange = [
-        tradeDayBegin(date),
-        tradeDayEnd(date)
-      ];
+      if (!currentRange) {
+        currentRange = result.currentRange = [
+          tradeDayBegin(date),
+          tradeDayEnd(date)
+        ];
 
-      result.ranges.push(currentRange);
-    }
+        result.ranges.push(currentRange);
+      }
 
-    return result;
-  }, { ranges: [], currentRange: null }).ranges.flat();
+      return result;
+    }, { ranges: [], currentRange: null }
+  ).ranges.flat();
 
   $: xRange = xDomain.reduce((ranges, _, idx) => {
     const days = (xDomain.length / 2);
@@ -131,7 +132,7 @@
 
     date = new Date(date.getTime());
 
-    date.setHours(8, 0, 0);
+    date.setHours(8, 0, 0, 0);
 
     return date;
   }
@@ -140,7 +141,7 @@
 
     date = new Date(date.getTime());
 
-    date.setHours(22, 0, 0);
+    date.setHours(22, 0, 0, 0);
 
     return date;
   }
@@ -165,8 +166,6 @@
       return index % 2 === 0;
     }
   }
-
-  $: console.log(xTicks);
 </script>
 
 <div class="chart" bind:clientWidth={width} bind:clientHeight={height}>
