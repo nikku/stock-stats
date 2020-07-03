@@ -100,7 +100,7 @@
     .nice();
 
   $: yScale = scaleLinear()
-    .domain([ yMax + (yMax - yMin) / 20, yMin - (yMax - yMin) / 20 ])
+    .domain([ yMax + (yMax - yMin) / 50, yMin - (yMax - yMin) / 50 ])
     .nice();
 
   $: xTicks = xScale.ticks(getXTicks(period));
