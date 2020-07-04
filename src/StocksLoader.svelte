@@ -56,10 +56,8 @@
 
 <style>
 
-  h1,
-  .intro,
-  .notice {
-    margin: var(--site-margin);
+  .stocks-loader {
+    padding: var(--site-margin);
   }
 
   .hint {
