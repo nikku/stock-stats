@@ -89,7 +89,11 @@ self.addEventListener('fetch', function(event) {
 
   const { url } = request;
 
-  if (url.startsWith('https://www.tradegate.de/')) {
+  const {
+    scope
+  } = self.registration;
+
+  if (!url.startsWith(scope)) {
     return;
   }
 
