@@ -1,5 +1,5 @@
 <script>
-  import Chart from './Chart.svelte';
+  import RealtimeChart from './RealtimeChart.svelte';
 
   import Loader from './Loader.svelte';
 
@@ -36,7 +36,11 @@
     <Loader />
   </div>
 {:then data}
-  <Chart data={ data } period={ period } svgStyle="var(--chart-height)" />
+  <RealtimeChart
+    data={ data }
+    period={ period }
+    svgStyle="var(--chart-height)"
+  />
 {:catch loadError}
   <p class="error">
     Could not load chart: { loadError.message }

@@ -2,7 +2,8 @@
 
   import { onMount } from 'svelte';
 
-  import ChartLoader from './ChartLoader.svelte';
+  import RealtimeChartLoader from './RealtimeChartLoader.svelte';
+  import Chart from './Chart.svelte';
 
   import StockDetails from './StockDetails.svelte';
 
@@ -181,12 +182,20 @@
       </div>
 
       <div class="chart">
-        <ChartLoader
-          isin={ stock.isin }
-          period={ period }
-          quotesService={ quotesService }
-          now={ now }
-        />
+        {#if quotesService}
+          <RealtimeChartLoader
+            isin={ stock.isin }
+            period={ period }
+            quotesService={ quotesService }
+            now={ now }
+          />
+        {:else}
+          <Chart
+            isin={ stock.isin }
+            period={ period }
+            now={ now }
+          />
+        {/if}
       </div>
 
       <div class="credit">
