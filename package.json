@@ -1,6 +1,5 @@
 {
-  "name": "stock-stats",
-  "private": "true",
+  "name": "@nikku/stock-stats",
   "version": "0.0.0",
   "scripts": {
     "build": "rollup -c",
