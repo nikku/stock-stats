@@ -1,13 +1,10 @@
 <script>
   export let isin;
   export let period;
-  export let detailsLink;
   export let now;
 </script>
 
-<a href={detailsLink}>
-  <img src="https://www.tradegate.de/images/charts/{ period }/{ isin }.png?{ now }" />
-</a>
+<img src="https://www.tradegate.de/images/charts/{ period }/{ isin }.png?{ now }" />
 
 <style>
   img {
