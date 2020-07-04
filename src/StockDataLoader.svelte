@@ -11,6 +11,8 @@
 
   export let stocks;
 
+  export let quotesService = null;
+
   let now = Date.now();
 
   let updateTimer;
@@ -63,4 +65,8 @@
   });
 </script>
 
-<StocksStats stocks={ stocksWithData || stocks } now={ now } />
+<StocksStats
+  stocks={ stocksWithData || stocks }
+  quotesService={ quotesService }
+  now={ now }
+/>

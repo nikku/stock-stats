@@ -3,6 +3,8 @@
 
   import StockDataLoader from './StockDataLoader.svelte';
 
+  export let quotesService;
+
   export let stocks = null;
 </script>
 
@@ -11,7 +13,7 @@
   {#if !stocks}
     <StocksLoader onStocksLoaded={ (_stocks) => stocks = _stocks } />
   {:else}
-    <StockDataLoader stocks={ stocks } />
+    <StockDataLoader stocks={ stocks } quotesService={ quotesService } />
   {/if}
 
 </main>

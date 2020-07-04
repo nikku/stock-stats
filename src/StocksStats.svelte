@@ -16,12 +16,14 @@
 
   const periodEntries = Object.entries(periods);
 
+  export let quotesService = null;
   export let stocks;
   export let now;
 
   // persistent search and stuff
   let period;
   let filter;
+
 
   parseSearchParams();
 
@@ -80,6 +82,8 @@
 
     filter = searchParams.get('filter') || '';
     period = periods[_period] && _period || 'woche';
+
+    quotesService = searchParams.get('quotes-service') || quotesService;
   }
 
   $: updateSearchParams({ filter, period });
@@ -180,6 +184,7 @@
         <ChartLoader
           isin={ stock.isin }
           period={ period }
+          quotesService={ quotesService }
           now={ now }
         />
       </div>
