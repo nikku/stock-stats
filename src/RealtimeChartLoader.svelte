@@ -11,6 +11,8 @@
 
   export let quotesService;
 
+  export let end;
+
   const periods = {
     intraday: 'intraday',
     woche: 'week',
@@ -21,11 +23,11 @@
 
   $: period = periods[periodDE];
 
-  $: dataLoaded = fetchStockPoints(isin, period, now);
+  $: dataLoaded = fetchStockPoints(isin, period, end, now);
 
-  function fetchStockPoints(isin, period, now) {
+  function fetchStockPoints(isin, period, end, now) {
     return (
-      fetch(`${quotesService}/stats/${isin}?period=${period}&now=${now}`)
+      fetch(`${quotesService}/stats/${isin}?period=${period}&end=${end.toISOString()}&now=${now}`)
         .then(r => r.json())
     );
   }

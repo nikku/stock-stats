@@ -15,6 +15,14 @@
     jahr: 'Jahr'
   };
 
+  const periodLengths = {
+    intraday: 1000 * 60 * 60 * 24,
+    woche: 1000 * 60 * 60 * 24 * 7,
+    monat: 1000 * 60 * 60 * 24 * 30,
+    monat6: 1000 * 60 * 60 * 24 * 30 * 6,
+    jahr: 1000 * 60 * 60 * 24 * 365
+  };
+
   const periodEntries = Object.entries(periods);
 
   export let quotesService = null;
@@ -24,13 +32,16 @@
   // persistent search and stuff
   let period;
   let filter;
-
+  let page = 0;
 
   parseSearchParams();
 
   let updateTimer;
 
   let filterInputEl;
+
+
+  $: end = new Date(Date.now() - periodLengths[period] * page);
 
   $: filteredStocks = filterStocks(stocks, filter);
 
@@ -83,13 +94,14 @@
 
     filter = searchParams.get('filter') || '';
     period = periods[_period] && _period || 'woche';
+    page = parseInt(searchParams.get('page') || '0', 10);
 
     quotesService = searchParams.get('quotes-service') || quotesService;
   }
 
-  $: updateSearchParams({ filter, period });
+  $: updateSearchParams({ filter, period, page });
 
-  function updateSearchParams({ filter, period }) {
+  function updateSearchParams({ filter, period, page }) {
 
     const href = window.location.href;
     const url = new URL(href);
@@ -103,6 +115,12 @@
     }
 
     searchParams.set('period', period);
+
+    if (page) {
+      searchParams.set('page', page);
+    } else {
+      searchParams.delete('page');
+    }
 
     const title = `${filter ? 'Filtered Stocks=' + filter : 'All stocks'} (period=${ period }) - Stock Stats`;
 
@@ -139,6 +157,10 @@
   function checkSticky() {
     stickyHeader = window.pageYOffset > stickyOffset;
   }
+
+  function changePage(direction) {
+    page = Math.max(0, page + direction);
+  }
 </script>
 
 <svelte:window
@@ -150,14 +172,31 @@
 <div class="head-container" class:sticky={ stickyHeader } bind:this={ headerEl }>
   <div class="head">
 
-    <div class="period">
+    <div class="section period">
       {#each periodEntries as [ key, label ]}
-        <button class:primary={ period == key }  on:click={ () => period = key }>{ label }</button>
+        <button class:primary={ period == key } on:click={ () => period = key }>
+          { label }
+        </button>
       {/each}
     </div>
 
-    <div class="filter">
-      <input type="search" placeholder="Filter nach Name oder ISIN" bind:value={ filter } bind:this={ filterInputEl }/> <span class="filtered-count">{ filter ? filteredStocks.length + '/' + stocks.length : ''}</span>
+    {#if quotesService}
+      <div class="section page">
+        {#if page}
+          <span class="context-info">End = { end.getDate() }/{ end.getMonth() + 1 }/{ end.getFullYear() }</span>
+        {/if}
+        <button on:click={ () => changePage(1) }>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" fill="currentColor" d="M9.78 12.78a.75.75 0 01-1.06 0L4.47 8.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 1.06L6.06 8l3.72 3.72a.75.75 0 010 1.06z"></path></svg>
+        </button><button on:click={ () => changePage(-1)} disabled={ !page }>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" fill="currentColor" d="M6.22 3.22a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 010-1.06z"></path></svg>
+        </button>
+      </div>
+    {/if}
+
+    <div class="section spacer"></div>
+
+    <div class="section filter">
+      <input type="search" placeholder="Filter nach Name oder ISIN" bind:value={ filter } bind:this={ filterInputEl }/>{#if filter}<span class="context-info">Filtered = { filteredStocks.length }/{stocks.length}</span>{/if}
     </div>
   </div>
 </div>
@@ -186,6 +225,7 @@
           <RealtimeChartLoader
             isin={ stock.isin }
             period={ period }
+            end={ end }
             quotesService={ quotesService }
             now={ now }
           />
@@ -212,18 +252,31 @@
   }
 
   .head {
-    padding: 10px var(--site-margin);
+    padding: 0 var(--site-margin);
 
     display: flex;
-    align-items: center
+    align-items: center;
+    flex-wrap: wrap;
   }
 
-  .head .period {
+  .head .filter,
+  .head .period,
+  .head .page {
+    flex: initial;
+    white-space: nowrap;
+    margin: 10px 0;
+  }
+
+  .head .spacer {
     flex: 1;
   }
 
-  .head .period button + button {
+  .head button + button {
     margin-left: .3rem;
+  }
+
+  .head .section + .section {
+    margin-left: 1rem;
   }
 
   @media(min-width: 1024px) {
@@ -240,14 +293,14 @@
     }
   }
 
-  .head .filter {
-    flex: 0;
-    white-space: nowrap;
-  }
-
-  .head .filtered-count {
+  .head .context-info {
     margin-left: .3rem;
     color: var(--gray-3);
+    font-size: .85rem;
+  }
+
+  .head button svg {
+    vertical-align: -.1rem;
   }
 
   .head button,
