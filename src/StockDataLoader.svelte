@@ -1,6 +1,5 @@
 <script>
   import {
-    fetchBrokerInformation,
     fetchStockInformation
   } from './util';
 
@@ -20,11 +19,6 @@
       data: stockData[stock.isin]
     }
   }));
-
-  // TODO(nikku): not working, due to CORS
-  // let brokerInfo;
-
-  // $: brokerInformationLoaded = fetchBrokerInformation(now).then(_brokerInfo => brokerInfo = _brokerInfo);
 
   function fetchStockData(stocks, now) {
 

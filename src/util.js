@@ -14,15 +14,6 @@ export function fetchStocks(url) {
   });
 }
 
-export function fetchBrokerInformation(now) {
-  return fetch(
-    'https://www.tradegate.de/json/tradegate1.json?' + now,
-    {
-      mode: 'no-cors'
-    }
-  ).then(r => r.json());
-}
-
 export function fetchStockInformation(isin) {
   return fetch('https://www.tradegate.de/refresh.php?isin=' + isin).then(r => r.json());
 }
