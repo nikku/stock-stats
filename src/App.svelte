@@ -14,13 +14,13 @@
   let now = Date.now();
 
   function tick() {
-    console.log('tick', new Date());
-
     now = Date.now();
   }
 
   function startTick() {
-    tick();
+    if (Date.now() - 30000 > now) {
+      tick();
+    }
 
     updateTimer = setInterval(tick, 30000);
   }
