@@ -1,7 +1,4 @@
 <script>
-
-  import { onMount, onDestroy } from 'svelte';
-
   import {
     fetchBrokerInformation,
     fetchStockInformation
@@ -13,9 +10,7 @@
 
   export let quotesService = null;
 
-  let now = Date.now();
-
-  let updateTimer;
+  export let now;
 
   let stocksWithData;
 
@@ -51,18 +46,6 @@
       return keyed;
     }, {}));
   }
-
-  function tick() {
-    now = Date.now();
-  }
-
-  onMount(() => {
-    updateTimer = setInterval(tick, 30000);
-  });
-
-  onDestroy(() => {
-    clearInterval(updateTimer);
-  });
 </script>
 
 <StocksStats
