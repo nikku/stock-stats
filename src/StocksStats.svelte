@@ -182,14 +182,14 @@
 
     {#if quotesService}
       <div class="section page">
-        {#if page}
-          <span class="context-info">End = { end.getDate() }/{ end.getMonth() + 1 }/{ end.getFullYear() }</span>
-        {/if}
         <button on:click={ () => changePage(1) }>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" fill="currentColor" d="M9.78 12.78a.75.75 0 01-1.06 0L4.47 8.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 1.06L6.06 8l3.72 3.72a.75.75 0 010 1.06z"></path></svg>
         </button><button on:click={ () => changePage(-1)} disabled={ !page }>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" fill="currentColor" d="M6.22 3.22a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 010-1.06z"></path></svg>
         </button>
+        {#if page}
+          <span class="context-info">End = { end.getDate() }/{ end.getMonth() + 1 }/{ end.getFullYear() }</span>
+        {/if}
       </div>
     {/if}
 
