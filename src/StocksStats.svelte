@@ -181,6 +181,8 @@
   function changePage(direction) {
     page = Math.max(0, page + direction);
   }
+
+  let dropdownOpen = false;
 </script>
 
 <svelte:window
@@ -192,12 +194,21 @@
 <div class="head-container" class:sticky={ stickyHeader } bind:this={ headerEl }>
   <div class="head">
 
-    <div class="section period">
-      {#each periodEntries as [ key, label ]}
-        <button class:primary={ period == key } on:click={ () => period = key }>
-          { label }
-        </button>
-      {/each}
+    <div
+      class="section period button primary dropdown"
+      class:open={ dropdownOpen }
+      on:click={ () => dropdownOpen = !dropdownOpen }
+    >
+
+      { periods[period] }
+
+      <div class="dropdown-menu">
+        {#each periodEntries as [ key, label ]}
+          <a class="dropdown-item button" href="#" on:click={ () => (period = key) }>
+            { label }
+          </a>
+        {/each}
+      </div>
     </div>
 
     {#if quotesService}
@@ -394,5 +405,39 @@
 
   .head-container {
     margin-bottom: 1.5rem;
+  }
+
+  .dropdown {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: relative;
+  }
+
+  .dropdown .dropdown-menu {
+    display:  none;
+  }
+
+  .dropdown > .dropdown-handle {
+    padding-left: .3rem;
+  }
+
+  .dropdown > .icon {
+    padding-right: .3rem;
+  }
+
+  .dropdown.open .dropdown-menu {
+    display: flex;
+    position: absolute;
+    left: 0;
+    top: 100%;
+    width: 200px;
+    flex-direction: column;
+    margin-top: 2px;
+  }
+
+  .dropdown .dropdown-item {
+    margin: 0;
+    text-decoration: none;
   }
 </style>
