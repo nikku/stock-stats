@@ -23,11 +23,24 @@
     jahr: 1000 * 60 * 60 * 24 * 365
   };
 
+  const refreshResolution = {
+    intraday: 1,
+    woche: 1000,
+    monat: 1000,
+    monat6: 1000,
+    jahr: 1000
+  };
+
   const periodEntries = Object.entries(periods);
 
   export let quotesService = null;
   export let stocks;
-  export let now;
+
+  // the time, coming from the app
+  let _now; export { _now as now };
+
+  // the actual local time, with refresh resolution applied
+  let now;
 
   // persistent search and stuff
   let period;
@@ -36,21 +49,28 @@
 
   parseSearchParams();
 
-  let updateTimer;
-
   let filterInputEl;
-
 
   $: end = new Date(Date.now() - periodLengths[period] * page);
 
   $: filteredStocks = filterStocks(stocks, filter);
 
+  $: {
+    const newNow = Math.ceil(_now / refreshResolution[period]) * refreshResolution[period];
+
+    if (now !== newNow) {
+      now = newNow;
+
+      console.log('refresh', new Date(now));
+    }
+  };
+
   function filterStocks(stocks, filterTerms) {
-    if (!filter) {
+    if (!filterTerms) {
       return stocks;
     }
 
-    const terms = Array.from(filter.matchAll(/(?:"([^"]*)(?:"|$)|([^,]*)),?/g), m => m[1] || m[2]).map(t => t.trim().toLowerCase()).filter(t => t);
+    const terms = Array.from(filterTerms.matchAll(/(?:"([^"]*)(?:"|$)|([^,]*)),?/g), m => m[1] || m[2]).map(t => t.trim().toLowerCase()).filter(t => t);
 
     const found = {};
 
@@ -86,7 +106,7 @@
     }
   }
 
-  function parseSearchParams(defaults) {
+  function parseSearchParams() {
     const url = new URL(window.location.href);
     const searchParams = url.searchParams;
 
