@@ -1,6 +1,6 @@
 {
   "name": "@nikku/stock-stats",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "scripts": {
     "build": "rollup -c",
     "dev": "run-s 'build -- -w' 'start -- --dev'",
