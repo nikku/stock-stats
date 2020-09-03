@@ -10,12 +10,14 @@
   --gray-5: #DDD;
   --gray-6: #f4f4f4;
 
+  --white: #fff;
   --red: #ad3333;
   --green: #009900;
 
   --site-margin: 1rem;
 
   --font-size-small: .7rem;
+  --border-radius-1: 2px;
 }
 
 html, body {
@@ -49,14 +51,14 @@ label {
   display: block;
 }
 
-input, button, a.button, select, textarea {
+input, button, .button, select, textarea {
   font-family: inherit;
   font-size: inherit;
   padding: 0.4em;
   margin: 0 0 0.5em 0;
   box-sizing: border-box;
   border: 1px solid var(--gray-4);
-  border-radius: 2px;
+  border-radius: var(--border-radius-1);
 }
 
 input:disabled {
@@ -68,7 +70,7 @@ input[type="range"] {
 }
 
 button,
-a.button {
+.button {
   color: var(--gray-1);
   background-color: var(--gray-6);
   outline: none;
@@ -81,48 +83,50 @@ button:disabled {
 
 button:not(:disabled):active,
 button:not(:disabled):hover,
-a.button:hover {
+.button:hover {
   background-color: var(--gray-5);
 }
 
 button:focus,
-a.button:focus {
+.button:focus {
   border-color: var(--gray-2);
 }
 
 button.primary,
-a.button.primary,
+.button.primary,
 input[type=button].primary {
   background: var(--blue-2);
   color: white;
 }
 
 button.primary:not(:hover),
-a.button.primary:not(:hover),
+.button.primary:not(:hover),
 input[type=button].primary:not(:hover) {
   border-color: var(--blue-1);
 }
 
 button.primary:hover,
-a.button.primary:hover,
+.button.primary:hover,
 input[type=button].primary:hover {
   background: var(--blue-1);
 }
 
 button.primary:disabled,
-a.button.primary.disabled,
+.button.primary.disabled,
 input[type=button].primary:disabled {
   background: var(--blue-3);
   border: none;
 }
 
-button, a.button {
+button, .button {
   border: none;
   padding: .3rem .6rem;
+
+  cursor: pointer;
 }
 
 button:focus,
-a.button:focus {
+.button:focus {
   border: solid 1px var(--blue-2);
   padding: calc(.3rem - 1px) calc(.6rem - 1px);
 }

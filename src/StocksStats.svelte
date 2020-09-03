@@ -416,14 +416,10 @@
 
   .dropdown .dropdown-menu {
     display:  none;
-  }
 
-  .dropdown > .dropdown-handle {
-    padding-left: .3rem;
-  }
-
-  .dropdown > .icon {
-    padding-right: .3rem;
+    border: solid 1px var(--gray-4);
+    border-radius: var(--border-radius-1);
+    background: var(--white);
   }
 
   .dropdown.open .dropdown-menu {
@@ -439,5 +435,12 @@
   .dropdown .dropdown-item {
     margin: 0;
     text-decoration: none;
+    color: var(--gray-1);
+    background: var(--white);
+    border-radius: 0;
+  }
+
+  .dropdown .dropdown-item:hover {
+    background:  var(--gray-6);
   }
 </style>
