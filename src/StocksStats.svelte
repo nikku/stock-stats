@@ -189,6 +189,9 @@
   on:keydown={ handleKey }
   on:popstate={ parseSearchParams }
   on:scroll={ checkSticky }
+  on:click={ () => {
+    dropdownOpen = false;
+  } }
 />
 
 <div class="head-container" class:sticky={ stickyHeader } bind:this={ headerEl }>
@@ -197,14 +200,14 @@
     <div
       class="section period button primary dropdown"
       class:open={ dropdownOpen }
-      on:click={ () => dropdownOpen = !dropdownOpen }
+      on:click|stopPropagation={ () => dropdownOpen = !dropdownOpen }
     >
 
       { periods[period] }
 
       <div class="dropdown-menu">
         {#each periodEntries as [ key, label ]}
-          <a class="dropdown-item button" href="#" on:click={ () => (period = key) }>
+          <a class="dropdown-item button" on:click|preventDefault={ () => (period = key) }>
             { label }
           </a>
         {/each}
@@ -430,6 +433,7 @@
     width: 200px;
     flex-direction: column;
     margin-top: 2px;
+    z-index: 100;
   }
 
   .dropdown .dropdown-item {
