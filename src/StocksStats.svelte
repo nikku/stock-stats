@@ -206,45 +206,46 @@
 <div class="head-container" class:sticky={ stickyHeader } bind:this={ headerEl }>
   <div class="head">
 
-    <div
-      class="section period button primary dropdown"
-      class:open={ dropdownOpen }
-      on:click|stopPropagation={ () => dropdownOpen = !dropdownOpen }
-    >
+    <div class="outer-section">
+      <div
+        class="section period button primary dropdown"
+        class:open={ dropdownOpen }
+        on:click|stopPropagation={ () => dropdownOpen = !dropdownOpen }
+      >
 
-      { periods[period] }
+        { periods[period] }
 
-      <div class="dropdown-menu">
-        {#each periodEntries as [ key, label ]}
-          <a class="dropdown-item button" on:click|preventDefault={ () => (period = key) }>
-            { label }
-          </a>
-        {/each}
+        <div class="dropdown-menu">
+          {#each periodEntries as [ key, label ]}
+            <a class="dropdown-item button" on:click|preventDefault={ () => (period = key) }>
+              { label }
+            </a>
+          {/each}
+        </div>
       </div>
-    </div>
 
-    {#if quotesService}
-      <div class="section page">
-        <button on:click={ () => changePage(1) }>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" fill="currentColor" d="M9.78 12.78a.75.75 0 01-1.06 0L4.47 8.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 1.06L6.06 8l3.72 3.72a.75.75 0 010 1.06z"></path></svg>
-        </button><button on:click={ () => changePage(-1)} disabled={ !page }>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" fill="currentColor" d="M6.22 3.22a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 010-1.06z"></path></svg>
+      {#if quotesService}
+        <div class="section page">
+          <button on:click={ () => changePage(1) }>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" fill="currentColor" d="M9.78 12.78a.75.75 0 01-1.06 0L4.47 8.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 1.06L6.06 8l3.72 3.72a.75.75 0 010 1.06z"></path></svg>
+          </button><button on:click={ () => changePage(-1)} disabled={ !page }>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" fill="currentColor" d="M6.22 3.22a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 010-1.06z"></path></svg>
+          </button>
+          {#if page}
+            <span class="context-info">End = { end.getDate() }/{ end.getMonth() + 1 }/{ end.getFullYear() }</span>
+          {/if}
+        </div>
+      {/if}
+
+      <div class="section spacer"></div>
+
+      <div class="section details-toggle" class:compact={ expandStocks }>
+        <button on:click={ () => expandStocks = expandStocks ? null : [] } title="Toggle compact view mode">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill="currentColor" fill-rule="evenodd" d="M0 3.75C0 2.784.784 2 1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0114.25 14H1.75A1.75 1.75 0 010 12.25v-8.5zm1.75-.25a.25.25 0 00-.25.25v8.5c0 .138.112.25.25.25h12.5a.25.25 0 00.25-.25v-8.5a.25.25 0 00-.25-.25H1.75zM3.5 6.25a.75.75 0 01.75-.75h7a.75.75 0 010 1.5h-7a.75.75 0 01-.75-.75zm.75 2.25a.75.75 0 000 1.5h4a.75.75 0 000-1.5h-4z"></path></svg>
         </button>
-        {#if page}
-          <span class="context-info">End = { end.getDate() }/{ end.getMonth() + 1 }/{ end.getFullYear() }</span>
-        {/if}
       </div>
-    {/if}
-
-    <div class="section spacer"></div>
-
-    <div class="section details-toggle" class:compact={ expandStocks }>
-      <button on:click={ () => expandStocks = expandStocks ? null : [] } title="Toggle compact view mode">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill="currentColor" fill-rule="evenodd" d="M0 3.75C0 2.784.784 2 1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0114.25 14H1.75A1.75 1.75 0 010 12.25v-8.5zm1.75-.25a.25.25 0 00-.25.25v8.5c0 .138.112.25.25.25h12.5a.25.25 0 00.25-.25v-8.5a.25.25 0 00-.25-.25H1.75zM3.5 6.25a.75.75 0 01.75-.75h7a.75.75 0 010 1.5h-7a.75.75 0 01-.75-.75zm.75 2.25a.75.75 0 000 1.5h4a.75.75 0 000-1.5h-4z"></path></svg>
-      </button>
     </div>
-
-    <div class="section filter">
+    <div class="outer-section section filter">
       <input type="search" placeholder="Filter nach Name oder ISIN" bind:value={ filter } bind:this={ filterInputEl }/>{#if filter}<span class="context-info">Filtered = { filteredStocks.length }/{stocks.length}</span>{/if}
     </div>
   </div>
@@ -253,7 +254,7 @@
 <div class="stocks" class:compact={ expandStocks }>
 
   {#each filteredStocks as stock (stock.isin)}
-    <div class="stock">
+    <div class="stock" class:expanded={ expandStocks && expandStocks.includes(stock.isin) }>
       <div class="stock-head">
         <h3>
           <a href={ createStockDeepLink(stock) }>{ stock.name }</a>
@@ -266,7 +267,7 @@
               () => expandStocks = expandStocks.includes(stock.isin) ? expandStocks.filter(isin => isin !== stock.isin) : expandStocks.concat(stock.isin)
             }>
 
-              {#if expandStocks.includes(stock.isin)}
+              {#if expandStocks.includes(stock.isin) }
                 <svg xmlns="http://www.w3.org/2000/svg" style="vertical-align: bottom" viewBox="0 0 16 16" width="16" height="16"><path d="M4.427 9.573l3.396-3.396a.25.25 0 01.354 0l3.396 3.396a.25.25 0 01-.177.427H4.604a.25.25 0 01-.177-.427z"></path></svg>
               {:else}
                 <svg xmlns="http://www.w3.org/2000/svg" style="vertical-align: bottom" viewBox="0 0 16 16" width="16" height="16"><path d="M4.427 7.427l3.396 3.396a.25.25 0 00.354 0l3.396-3.396A.25.25 0 0011.396 7H4.604a.25.25 0 00-.177.427z"></path></svg>
@@ -332,6 +333,17 @@
     margin: 10px 0;
   }
 
+  .head .outer-section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex: 1;
+  }
+
+  .head .outer-section.filter {
+    flex: initial;
+  }
+
   .head .spacer {
     flex: 1;
   }
@@ -350,20 +362,6 @@
 
   .details-toggle.compact svg {
     color: var(--gray-3);
-  }
-
-  @media(min-width: 1024px) {
-    .head .filter {
-      min-width: 30%;
-      display: flex;
-      align-items: center;
-    }
-
-    .head .filter input {
-      width: auto;
-      flex: 1;
-      margin: 0;
-    }
   }
 
   .head .context-info {
@@ -429,25 +427,52 @@
   .stocks {
     display: grid;
     grid-template-columns: repeat(auto-fill, var(--grid-width));
-    grid-gap: 3rem 3rem;
+    gap: 3rem 3rem;
 
     margin: var(--site-margin);
   }
 
-  .stock:hover {
-    margin: -7px -10px;
-    padding: 7px 10px;
-    background: #FAFAFA;
-    border-radius: 5px;
+  .stocks.compact {
+    gap: 1rem 5rem;
   }
 
-  .stocks.compact {
-    grid-gap: 1rem 5rem;
+  .stock.expanded {
+    grid-row: span 5;
+    margin-bottom: 7px;
+  }
+
+  @media(min-width: 1024px) {
+    .head .filter {
+      min-width: 30%;
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .head .filter input {
+    width: auto;
+    flex: 1;
+    margin: 0;
   }
 
   @media(max-width: 768px) {
     .stocks {
       grid-template-columns: repeat(auto-fill, minmax(min(--grid-width, 100%), 1fr));
+    }
+
+    .head {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .head .outer-section + .outer-section {
+      margin-top: 0;
+    }
+  }
+
+  @media(min-width: 769px) {
+    .head .outer-section + .outer-section {
+      margin-left: 1rem;
     }
   }
 
