@@ -45,6 +45,7 @@
   // persistent search and stuff
   let period;
   let filter;
+  let expandStocks;
   let page = 0;
 
   parseSearchParams();
@@ -111,17 +112,19 @@
     const searchParams = url.searchParams;
 
     const _period = searchParams.get('period');
+    const _expandStocks = searchParams.get('expand-stocks');
 
     filter = searchParams.get('filter') || '';
+    expandStocks = _expandStocks !== null ? _expandStocks.split(/,/) : null;
     period = periods[_period] && _period || 'woche';
     page = parseInt(searchParams.get('page') || '0', 10);
 
     quotesService = searchParams.get('quotes-service') || quotesService;
   }
 
-  $: updateSearchParams({ filter, period, page });
+  $: updateSearchParams({ filter, period, page, expandStocks });
 
-  function updateSearchParams({ filter, period, page }) {
+  function updateSearchParams({ filter, period, page, expandStocks }) {
 
     const href = window.location.href;
     const url = new URL(href);
@@ -132,6 +135,12 @@
       searchParams.delete('filter');
     } else {
       searchParams.set('filter', filter);
+    }
+
+    if (!expandStocks) {
+      searchParams.delete('expand-stocks');
+    } else {
+      searchParams.set('expand-stocks', expandStocks.join(','));
     }
 
     searchParams.set('period', period);
@@ -229,13 +238,19 @@
 
     <div class="section spacer"></div>
 
+    <div class="section details-toggle" class:compact={ expandStocks }>
+      <button on:click={ () => expandStocks = expandStocks ? null : [] } title="Toggle compact view mode">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill="currentColor" fill-rule="evenodd" d="M0 3.75C0 2.784.784 2 1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0114.25 14H1.75A1.75 1.75 0 010 12.25v-8.5zm1.75-.25a.25.25 0 00-.25.25v8.5c0 .138.112.25.25.25h12.5a.25.25 0 00.25-.25v-8.5a.25.25 0 00-.25-.25H1.75zM3.5 6.25a.75.75 0 01.75-.75h7a.75.75 0 010 1.5h-7a.75.75 0 01-.75-.75zm.75 2.25a.75.75 0 000 1.5h4a.75.75 0 000-1.5h-4z"></path></svg>
+      </button>
+    </div>
+
     <div class="section filter">
       <input type="search" placeholder="Filter nach Name oder ISIN" bind:value={ filter } bind:this={ filterInputEl }/>{#if filter}<span class="context-info">Filtered = { filteredStocks.length }/{stocks.length}</span>{/if}
     </div>
   </div>
 </div>
 
-<div class="stocks">
+<div class="stocks" class:compact={ expandStocks }>
 
   {#each filteredStocks as stock (stock.isin)}
     <div class="stock">
@@ -246,6 +261,20 @@
           <StockDetails data={ stock.data } />
         </h3>
         <div class="actions">
+          {#if expandStocks }
+            <a class="button" style="padding: .3rem .1rem" on:click={
+              () => expandStocks = expandStocks.includes(stock.isin) ? expandStocks.filter(isin => isin !== stock.isin) : expandStocks.concat(stock.isin)
+            }>
+
+              {#if expandStocks.includes(stock.isin)}
+                <svg xmlns="http://www.w3.org/2000/svg" style="vertical-align: bottom" viewBox="0 0 16 16" width="16" height="16"><path d="M4.427 9.573l3.396-3.396a.25.25 0 01.354 0l3.396 3.396a.25.25 0 01-.177.427H4.604a.25.25 0 01-.177-.427z"></path></svg>
+              {:else}
+                <svg xmlns="http://www.w3.org/2000/svg" style="vertical-align: bottom" viewBox="0 0 16 16" width="16" height="16"><path d="M4.427 7.427l3.396 3.396a.25.25 0 00.354 0l3.396-3.396A.25.25 0 0011.396 7H4.604a.25.25 0 00-.177.427z"></path></svg>
+              {/if}
+            </a>
+            <span class="spacer"></span>
+          {/if}
+
           <a class="button" title="Stock information" href="https://www.dkb.de/kurse/portrait.html?isin={ stock.isin }">
             I
           </a>
@@ -254,28 +283,30 @@
         </div>
       </div>
 
-      <div class="chart">
-        {#if quotesService}
-          <RealtimeChartLoader
-            isin={ stock.isin }
-            period={ period }
-            end={ end }
-            quotesService={ quotesService }
-            now={ now }
-          />
-        {:else}
-          <Chart
-            isin={ stock.isin }
-            period={ period }
-            now={ now }
-          />
-        {/if}
-      </div>
+      {#if !expandStocks || expandStocks.includes(stock.isin) }
+        <div class="chart">
+          {#if quotesService}
+            <RealtimeChartLoader
+              isin={ stock.isin }
+              period={ period }
+              end={ end }
+              quotesService={ quotesService }
+              now={ now }
+            />
+          {:else}
+            <Chart
+              isin={ stock.isin }
+              period={ period }
+              now={ now }
+            />
+          {/if}
+        </div>
 
-      <div class="credit">
-        Data: <a href="https://www.tradegate.de/orderbuch.php?isin={ stock.isin }">Tradegate</a>,
-        ISIN: { stock.isin }
-      </div>
+        <div class="credit">
+          Data: <a href="https://www.tradegate.de/orderbuch.php?isin={ stock.isin }">Tradegate</a>,
+          ISIN: { stock.isin }
+        </div>
+      {/if}
     </div>
   {/each}
 </div>
@@ -311,6 +342,14 @@
 
   .head .section + .section {
     margin-left: 1rem;
+  }
+
+  .details-toggle svg {
+    color: var(--gray-1);
+  }
+
+  .details-toggle.compact svg {
+    color: var(--gray-3);
   }
 
   @media(min-width: 1024px) {
@@ -354,8 +393,6 @@
 
   .stock-head {
     display: flex;
-    margin-bottom: 10px;
-
     align-items: center;
   }
 
@@ -372,17 +409,40 @@
 
   .stock-head .actions {
     white-space: nowrap;
-    margin: 0 20px;
     flex: 0;
     font-size: .8em;
   }
 
+  .stock-head .actions .spacer {
+    width: .3rem;
+    display: inline-block;
+  }
+
+  .stock-head .actions a {
+    text-decoration: none;
+  }
+
+  .stock-head + .chart {
+    margin-top: 10px;
+  }
+
   .stocks {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(var(--grid-width), 1fr));
-    grid-gap: 3rem 1rem;
+    grid-template-columns: repeat(auto-fill, var(--grid-width));
+    grid-gap: 3rem 3rem;
 
     margin: var(--site-margin);
+  }
+
+  .stock:hover {
+    margin: -7px -10px;
+    padding: 7px 10px;
+    background: #FAFAFA;
+    border-radius: 5px;
+  }
+
+  .stocks.compact {
+    grid-gap: 1rem 5rem;
   }
 
   @media(max-width: 768px) {
