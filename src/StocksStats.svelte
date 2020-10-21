@@ -426,8 +426,8 @@
 
   .stocks {
     display: grid;
-    grid-template-columns: repeat(auto-fill, var(--grid-width));
-    gap: 3rem 3rem;
+    grid-template-columns: repeat(auto-fill, minmax(var(--grid-width), 1fr));
+    gap: 3rem 5rem;
 
     margin: var(--site-margin);
   }
