@@ -2,6 +2,10 @@
 
   import { onMount } from 'svelte';
 
+  import {
+    getStockDelta
+  } from './util';
+
   import RealtimeChartLoader from './RealtimeChartLoader.svelte';
   import Chart from './Chart.svelte';
 
@@ -47,6 +51,7 @@
   let filter;
   let expandStocks;
   let page = 0;
+  let sort = false;
 
   parseSearchParams();
 
@@ -55,6 +60,10 @@
   $: end = new Date(Date.now() - periodLengths[period] * page);
 
   $: filteredStocks = filterStocks(stocks, filter);
+
+  $: sortedStocks = sortStocks(filteredStocks, sort);
+
+  $: console.log(sortedStocks);
 
   $: {
     const newNow = Math.ceil(_now / refreshResolution[period]) * refreshResolution[period];
@@ -65,6 +74,17 @@
       console.log('refresh', new Date(now));
     }
   };
+
+  function sortStocks(stocks, sort) {
+
+    if (!sort) {
+      return stocks;
+    }
+
+    return stocks.slice().sort((a, b) => {
+      return getStockDelta(b.data) - getStockDelta(a.data);
+    });
+  }
 
   function filterStocks(stocks, filterTerms) {
     if (!filterTerms) {
@@ -118,13 +138,14 @@
     expandStocks = _expandStocks !== null ? _expandStocks.split(/,/) : null;
     period = periods[_period] && _period || 'woche';
     page = parseInt(searchParams.get('page') || '0', 10);
+    sort = searchParams.get('sort');
 
     quotesService = searchParams.get('quotes-service') || quotesService;
   }
 
-  $: updateSearchParams({ filter, period, page, expandStocks });
+  $: updateSearchParams({ filter, period, page, expandStocks, sort });
 
-  function updateSearchParams({ filter, period, page, expandStocks }) {
+  function updateSearchParams({ filter, period, page, expandStocks, sort }) {
 
     const href = window.location.href;
     const url = new URL(href);
@@ -135,6 +156,12 @@
       searchParams.delete('filter');
     } else {
       searchParams.set('filter', filter);
+    }
+
+    if (!sort) {
+      searchParams.delete('sort');
+    } else {
+      searchParams.set('sort', true);
     }
 
     if (!expandStocks) {
@@ -239,6 +266,12 @@
 
       <div class="section spacer"></div>
 
+      <div class="section sort-toggle" class:compact={ !sort }>
+        <button on:click={ () => sort = !sort } title="Toggle sort mode">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill="currentColor" fill-rule="evenodd" d="M6 2a.75.75 0 01.696.471L10 10.731l1.304-3.26A.75.75 0 0112 7h3.25a.75.75 0 010 1.5h-2.742l-1.812 4.528a.75.75 0 01-1.392 0L6 4.77 4.696 8.03A.75.75 0 014 8.5H.75a.75.75 0 010-1.5h2.742l1.812-4.529A.75.75 0 016 2z"></path></svg>
+        </button>
+      </div>
+
       <div class="section details-toggle" class:compact={ expandStocks }>
         <button on:click={ () => expandStocks = expandStocks ? null : [] } title="Toggle compact view mode">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill="currentColor" fill-rule="evenodd" d="M0 3.75C0 2.784.784 2 1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0114.25 14H1.75A1.75 1.75 0 010 12.25v-8.5zm1.75-.25a.25.25 0 00-.25.25v8.5c0 .138.112.25.25.25h12.5a.25.25 0 00.25-.25v-8.5a.25.25 0 00-.25-.25H1.75zM3.5 6.25a.75.75 0 01.75-.75h7a.75.75 0 010 1.5h-7a.75.75 0 01-.75-.75zm.75 2.25a.75.75 0 000 1.5h4a.75.75 0 000-1.5h-4z"></path></svg>
@@ -253,7 +286,7 @@
 
 <div class="stocks" class:compact={ expandStocks }>
 
-  {#each filteredStocks as stock (stock.isin)}
+  {#each sortedStocks as stock (stock.isin)}
     <div class="stock" class:expanded={ expandStocks && expandStocks.includes(stock.isin) }>
       <div class="stock-head">
         <h3>
@@ -360,7 +393,8 @@
     color: var(--gray-1);
   }
 
-  .details-toggle.compact svg {
+  .details-toggle.compact svg,
+  .sort-toggle.compact svg {
     color: var(--gray-3);
   }
 

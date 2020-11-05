@@ -1,11 +1,15 @@
 <script>
   import Placeholder from './Placeholder.svelte';
 
+  import {
+    getStockValue,
+    getStockDelta
+  } from './util';
+
   export let data;
 
-  $: last = data && (typeof data.last === 'string' ? data.last.replace(' ', '').replace(',', '.') : data.last);
-  $: delta = data && data.delta.replace(',', '.');
-  $: numericDelta = data && parseFloat(delta);
+  $: last = getStockValue(data);
+  $: delta = getStockDelta(data);
 </script>
 
 <div class="details">
@@ -15,8 +19,8 @@
       { last }
     </span>
 
-    <span class="delta" title="Aktuelles Tagesdelta" class:falling={ numericDelta < 0 } class:rising={ numericDelta > 0 }>
-      { delta }
+    <span class="delta" title="Aktuelles Tagesdelta" class:falling={ delta < 0 } class:rising={ delta > 0 }>
+      { delta }%
     </span>
   {:else}
     <Placeholder>
