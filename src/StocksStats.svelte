@@ -59,6 +59,8 @@
 
   $: end = new Date(Date.now() - periodLengths[period] * page);
 
+  $: console.log(stocks.map(stock => stock.name));
+
   $: filteredStocks = filterStocks(stocks, filter);
 
   $: sortedStocks = sortStocks(filteredStocks, sort);
