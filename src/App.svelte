@@ -58,7 +58,7 @@
 <main>
 
   {#if !stocks}
-    <StocksLoader onStocksLoaded={ _stocks => console.log(stocks = sortStocks(_stocks)) } />
+    <StocksLoader onStocksLoaded={ _stocks => stocks = sortStocks(_stocks) } />
   {:else}
     <StockDataLoader stocks={ stocks } quotesService={ quotesService } now={ now } />
   {/if}

@@ -63,8 +63,6 @@
 
   $: sortedStocks = sortStocks(filteredStocks, sort);
 
-  $: console.log(sortedStocks);
-
   $: {
     const newNow = Math.ceil(_now / refreshResolution[period]) * refreshResolution[period];
 
