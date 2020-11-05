@@ -10,7 +10,7 @@
 
   {#if data}
     <span class="average" title="Aktueller Wert">
-      { data.avg }
+      { data.last }
     </span>
 
     <span class="delta" title="Aktuelles Tagesdelta" class:falling={ numericDelta < 0 } class:rising={ numericDelta > 0 }>
