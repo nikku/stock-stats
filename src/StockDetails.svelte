@@ -3,18 +3,20 @@
 
   export let data;
 
-  $: numericDelta = data && parseFloat(data.delta.replace(',', '.'));
+  $: last = data && (typeof data.last === 'string' ? data.last.replace(' ', '').replace(',', '.') : data.last);
+  $: delta = data && data.delta.replace(',', '.');
+  $: numericDelta = data && parseFloat(delta);
 </script>
 
 <div class="details">
 
   {#if data}
     <span class="average" title="Aktueller Wert">
-      { data.last }
+      { last }
     </span>
 
     <span class="delta" title="Aktuelles Tagesdelta" class:falling={ numericDelta < 0 } class:rising={ numericDelta > 0 }>
-      { data.delta }
+      { delta }
     </span>
   {:else}
     <Placeholder>
