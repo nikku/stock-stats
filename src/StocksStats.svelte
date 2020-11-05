@@ -59,8 +59,6 @@
 
   $: end = new Date(Date.now() - periodLengths[period] * page);
 
-  $: console.log(stocks.map(stock => stock.name));
-
   $: filteredStocks = filterStocks(stocks, filter);
 
   $: sortedStocks = sortStocks(filteredStocks, sort);
@@ -75,15 +73,27 @@
     }
   };
 
-  function sortStocks(stocks, sort) {
 
-    if (!sort) {
-      return stocks;
+  function nameSort(a, b) {
+    var nameA = a.name.toUpperCase();
+    var nameB = b.name.toUpperCase();
+
+    if (nameA < nameB) {
+      return -1;
     }
 
-    return stocks.slice().sort((a, b) => {
-      return getStockDelta(b.data) - getStockDelta(a.data);
-    });
+    if (nameA > nameB) {
+      return 1;
+    }
+    return 0;
+  }
+
+  function deltaSort(a, b) {
+    return getStockDelta(b.data) - getStockDelta(a.data);
+  }
+
+  function sortStocks(stocks, sort) {
+    return stocks.slice().sort(sort ? deltaSort : nameSort);
   }
 
   function filterStocks(stocks, filterTerms) {
