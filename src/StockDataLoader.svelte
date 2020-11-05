@@ -22,14 +22,14 @@
 
   function fetchStockData(stocks, now) {
 
-    return Promise.all(stocks.map(s => {
+    return Promise.all(stocks.map(stock => {
 
-      const isin = s.isin;
+      const { isin } = stock;
 
-      return fetchStockInformation(s.isin, now).then(info => {
+      return fetchStockInformation(isin, now).then(info => {
 
         return {
-          isin: s.isin,
+          isin,
           info
         };
       })
