@@ -9,6 +9,22 @@
 
   export let stocks = null;
 
+  function sortStocks(stocks) {
+    return stocks.slice().sort((a, b) => {
+      var nameA = a.name.toUpperCase();
+      var nameB = b.name.toUpperCase();
+
+      if (nameA < nameB) {
+        return -1;
+      }
+
+      if (nameA > nameB) {
+        return 1;
+      }
+      return 0;
+    });
+  }
+
   let updateTimer;
 
   let now = Date.now();
@@ -42,7 +58,7 @@
 <main>
 
   {#if !stocks}
-    <StocksLoader onStocksLoaded={ (_stocks) => stocks = _stocks } />
+    <StocksLoader onStocksLoaded={ _stocks => console.log(stocks = sortStocks(_stocks)) } />
   {:else}
     <StockDataLoader stocks={ stocks } quotesService={ quotesService } now={ now } />
   {/if}
