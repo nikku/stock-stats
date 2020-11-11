@@ -2,10 +2,6 @@
 
   import { onMount } from 'svelte';
 
-  import {
-    getStockDelta
-  } from './util';
-
   import RealtimeChartLoader from './RealtimeChartLoader.svelte';
   import Chart from './Chart.svelte';
 
@@ -89,7 +85,7 @@
   }
 
   function deltaSort(a, b) {
-    return getStockDelta(b.data) - getStockDelta(a.data);
+    return (a.data && a.data.delta) - (b.data && b.data.delta);
   }
 
   function sortStocks(stocks, sort) {

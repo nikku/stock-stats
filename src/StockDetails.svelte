@@ -1,15 +1,10 @@
 <script>
   import Placeholder from './Placeholder.svelte';
 
-  import {
-    getStockValue,
-    getStockDelta
-  } from './util';
-
   export let data;
 
-  $: last = getStockValue(data);
-  $: delta = getStockDelta(data);
+  $: last = data && data.last;
+  $: delta = data && data.delta;
 </script>
 
 <div class="details">
