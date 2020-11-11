@@ -41,7 +41,7 @@
   <RealtimeChart
     data={ data }
     period={ period }
-    svgStyle="var(--chart-height)"
+    svgStyle="height: var(--chart-height)"
   />
 {:catch loadError}
   <p class="error">
