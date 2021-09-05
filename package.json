@@ -8,13 +8,14 @@
     "prepare": "run-s build"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^16.0.0",
-    "@rollup/plugin-node-resolve": "^10.0.0",
-    "d3-scale": "^3.2.3",
+    "@rollup/plugin-commonjs": "^20.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.4",
+    "d3-scale": "^3.3.0",
     "npm-run-all": "^4.1.5",
-    "rollup": "^2.33.1",
-    "rollup-plugin-livereload": "^2.0.0",
-    "rollup-plugin-svelte": "^6.1.0",
+    "rollup": "^2.56.3",
+    "rollup-plugin-css-only": "^3.1.0",
+    "rollup-plugin-livereload": "^2.0.5",
+    "rollup-plugin-svelte": "^7.1.0",
     "rollup-plugin-terser": "^7.0.2",
     "sirv-cli": "^1.0.8",
     "svelte": "^3.29.4"
