@@ -11,5 +11,6 @@
     background: var(--gray-6);
     border-radius: 5px;
     height: 207px;
+    position: relative;
   }
 </style>

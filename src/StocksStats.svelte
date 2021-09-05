@@ -489,6 +489,10 @@
     }
   }
 
+  .chart {
+    position: relative;
+  }
+
   .head .filter input {
     width: auto;
     flex: 1;

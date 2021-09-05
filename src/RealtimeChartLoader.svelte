@@ -1,5 +1,6 @@
 <script>
   import RealtimeChart from './RealtimeChart.svelte';
+  import DataLoader from './DataLoader.svelte';
 
   import Loader from './Loader.svelte';
 
@@ -23,7 +24,7 @@
 
   $: period = periods[periodDE];
 
-  $: dataLoaded = fetchStockPoints(isin, period, end, now);
+  $: args = [ isin, period, end, now ];
 
   function fetchStockPoints(isin, period, end, now) {
     return (
@@ -33,22 +34,33 @@
   }
 </script>
 
-{#await dataLoaded}
-  <div class="loader">
-    <Loader />
-  </div>
-{:then data}
-  <RealtimeChart
-    data={ data }
-    period={ period }
-    svgStyle="height: var(--chart-height)"
-  />
-{:catch loadError}
-  <p class="error">
-    Could not load chart: { loadError.message }
-  </p>
-{/await}
+<DataLoader
+  loader={ fetchStockPoints } args={ args }
+  let:state
+  let:result
+  let:error
+>
 
+  {#if state === 'loading'}
+    <div class="loader" class:placeholder={ !result }>
+      <Loader />
+    </div>
+  {/if}
+
+  {#if result}
+    <RealtimeChart
+      data={ result }
+      period={ period }
+      svgStyle="height: var(--chart-height)"
+    />
+  {/if}
+
+  {#if error}
+    <p class="error">
+      Could not load chart: { error.message }
+    </p>
+  {/if}
+</DataLoader>
 
 <style>
 
@@ -57,10 +69,17 @@
   }
 
   .loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  .loader.placeholder {
     height: var(--chart-height);
-    border-radius: 5px;
     background: var(--gray-6);
-    position: relative;
+    border-radius: 5px;
   }
 
 </style>
