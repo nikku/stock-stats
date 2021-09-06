@@ -5,7 +5,7 @@
 <style>
   .placeholder {
     background: var(--gray-6);
-    border-radius: 5px;
+    border-radius: var(--border-radius-large);
   }
 
   .placeholder > :global(*) {

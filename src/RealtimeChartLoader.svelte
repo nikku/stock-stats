@@ -3,6 +3,7 @@
   import DataLoader from './DataLoader.svelte';
 
   import Loader from './Loader.svelte';
+  import Placeholder from './Placeholder.svelte';
 
   export let isin;
 
@@ -41,9 +42,9 @@
   let:error
 >
 
-  {#if state === 'loading'}
-    <div class="loader" class:placeholder={ !result }>
-      <Loader />
+  {#if error}
+    <div class="error">
+      E: { error.message }
     </div>
   {/if}
 
@@ -53,12 +54,14 @@
       period={ period }
       svgStyle="height: var(--chart-height)"
     />
+  {:else}
+    <Placeholder>
+      <div style="height: var(--chart-height)"></div>
+    </Placeholder>
   {/if}
 
-  {#if error}
-    <p class="error">
-      Could not load chart: { error.message }
-    </p>
+  {#if state === 'loading'}
+    <Loader />
   {/if}
 </DataLoader>
 
@@ -68,18 +71,12 @@
     --chart-height: 240px;
   }
 
-  .loader {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+  .error {
+    font-size: var(--font-size-small);
+    color: var(--white);
+    background: var(--red);
+    padding: 5px;
+    border-radius: var(--border-radius-small);
+    margin-bottom: 10px;
   }
-
-  .loader.placeholder {
-    height: var(--chart-height);
-    background: var(--gray-6);
-    border-radius: 5px;
-  }
-
 </style>

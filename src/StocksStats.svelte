@@ -3,7 +3,7 @@
   import { onMount } from 'svelte';
 
   import RealtimeChartLoader from './RealtimeChartLoader.svelte';
-  import Chart from './Chart.svelte';
+  import ImageChart from './ImageChart.svelte';
 
   import StockDetails from './StockDetails.svelte';
 
@@ -334,7 +334,7 @@
               now={ now }
             />
           {:else}
-            <Chart
+            <ImageChart
               isin={ stock.isin }
               period={ period }
               now={ now }
@@ -550,7 +550,7 @@
     display:  none;
 
     border: solid 1px var(--gray-4);
-    border-radius: var(--border-radius-1);
+    border-radius: var(--border-radius-small);
     background: var(--white);
   }
 

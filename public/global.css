@@ -17,7 +17,8 @@
   --site-margin: 1rem;
 
   --font-size-small: .7rem;
-  --border-radius-1: 2px;
+  --border-radius-small: 2px;
+  --border-radius-large: 5px;
 }
 
 html, body {
@@ -58,7 +59,7 @@ input, button, .button, select, textarea {
   margin: 0 0 0.5em 0;
   box-sizing: border-box;
   border: 1px solid var(--gray-4);
-  border-radius: var(--border-radius-1);
+  border-radius: var(--border-radius-small);
 }
 
 input:disabled {

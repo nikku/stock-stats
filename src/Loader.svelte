@@ -26,7 +26,7 @@
     top: -10px;
     width: 10px;
     height: 10px;
-    border-radius: 5px;
+    border-radius: var(--border-radius-large);
     background-color: var(--blue-1);
     color: var(--blue-1);
     transform-origin: 5px 15px;
@@ -45,7 +45,7 @@
     top: 15px;
     width: 10px;
     height: 10px;
-    border-radius: 5px;
+    border-radius: var(--border-radius-large);
     background-color: var(--blue-1);
     color: var(--blue-1);
   }
@@ -55,7 +55,7 @@
     top: 15px;
     width: 10px;
     height: 10px;
-    border-radius: 5px;
+    border-radius: var(--border-radius-large);
     background-color: var(--blue-1);
     color: var(--blue-1);
   }

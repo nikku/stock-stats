@@ -9,7 +9,7 @@
 <style>
   img {
     background: var(--gray-6);
-    border-radius: 5px;
+    border-radius: var(--border-radius-large);
     height: 207px;
     position: relative;
   }
