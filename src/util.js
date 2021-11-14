@@ -36,14 +36,22 @@ export async function fetchStockInformation(isin) {
   } = data;
 
   return {
-    delta: parseFloat(delta.replace(',', '.')),
-    last: parseFloat((last + '').replace(' ', '').replace(',', '.')),
+    delta: toNum(delta),
+    last: toNum(last),
     ...additionalData
   };
 }
 
 function unquote(str) {
   return str.replace(/^["\s]*|["\s]*$/g, '');
+}
+
+function toNum(strOrNumber) {
+  if (typeof strOrNumber === 'number') {
+    return strOrNumber;
+  }
+
+  return parseFloat((strOrNumber + '').replace(' ', '').replace(',', '.'));
 }
 
 export function formatNumber(number, digits=2) {
